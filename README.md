@@ -9,8 +9,6 @@
 
 > A line creator for flat 2D and 3D lines.
 
-![lines](/teaser.gif?raw=true "Flat lines drawn with regl-line")
-
 <p align="center">
   <img src="https://flekschas.github.io/regl-line/teaser.gif" />
 </p>
