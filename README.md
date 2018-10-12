@@ -8,6 +8,8 @@
 
 > A line creator for flat 2D and 3D lines.
 
+![lines](/teaser.gif?raw=true "Flat lines drawn with regl-line")
+
 This small library is inspired by [Regl's line example](http://regl.party/examples?line) and Matt Deslauriers' [wonderful blog post on drawing lines in WebGL](https://mattdesl.svbtle.com/drawing-lines-is-hard).
 
 ## Install
@@ -20,7 +22,7 @@ npm -i regl-line
 
 ```javascript
 import createRegl from "regl";
-import createCamera from "canvas-camera-2d";
+import createCamera from "canvas-orbit-camera";
 import createLine from "regl-line";
 
 // Setup the canvas
@@ -36,9 +38,9 @@ const camera = createCamera(canvas);
 // Create a line
 const lineSimple = createLine(regl, {
   width: 2,
-  color: [0.3, 0.3, 0.3, 1.0],
+  color: [0.8, 0.2, 0.0, 1.0],
   is2d: true,
-  points: [-0.9, +0.9, +0.9, +0.9, +0.9, -0.9, -0.9, -0.9]
+  points: [-0.9, +0.9, +0.9, +0.9, +0.9, -0.9, -0.9, -0.9, -0.9, +0.85]
 });
 
 line.setPoints();
@@ -56,12 +58,21 @@ See a complete example at [example/index.js](example/index.js).
 ## API
 
 **createLine(regl, options)**
+
 **line.clear()**
+
 **line.destroy()**
+
 **line.draw({ projection, model, view })**
+
 **line.getBuffer()**
+
 **line.getData()**
+
 **line.getPoints()**
+
 **line.getStyle()**
+
 **line.setPoints(points, widths, is2d)**
+
 **line.setStyle({ color, miter, width })**
