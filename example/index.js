@@ -46,7 +46,7 @@ const makeProjection = (viewportWidth, viewportHeight) =>
 // prettier-ignore
 const lineSimple = createLine(regl, {
   width: 100,
-  color: [1.0, 1.0, 1.0, 1.0],
+  color: [0.75, 0.75, 0.75, 1],
   is2d: true,
   points: [
     -0.9, +0.9,
@@ -90,6 +90,7 @@ regl.frame(({ tick, viewportWidth, viewportHeight }) => {
   // For pan and zoom
   const projection = makeProjection(viewportWidth, viewportHeight);
   const view = camera.view();
+  lineSimple.draw({ projection, model, view });
   // For animation
   mapElement(line.getData().points, 2, 3, (v, a, i) => {
     const start = pointDataSource[a];
@@ -97,9 +98,7 @@ regl.frame(({ tick, viewportWidth, viewportHeight }) => {
     return start + offset;
   });
   line.getBuffer().points.subdata(line.getData().points, 0);
-  // Finally, draw the line!
   line.draw({ projection, view });
-  lineSimple.draw({ projection, model, view });
 });
 
 window.addEventListener("resize", fit(canvas), false);
