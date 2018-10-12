@@ -18,7 +18,7 @@
     "dist/regl-line.min.js"
   ],
   "scripts": {
-    "build": "rollup -c; webpack --config ./webpack.config.js --mode production",
+    "build": "rollup -c; webpack --config ./webpack.config.js --mode production; touch docs/.nojekyll",
     "lint": "eslint src example rollup.config.js webpack.config.js",
     "precommit": "pretty-quick --staged",
     "prepublishOnly": "npm run lint",
