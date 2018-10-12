@@ -1,0 +1,31 @@
+language: node_js
+node_js:
+  - "8"
+branches:
+  only:
+    - master
+    - develop
+    - "/^v.*$/"
+before_script:
+  - npm install
+before_deploy:
+  - npm run prerelease
+deploy:
+  - provider: releases
+    skip_cleanup: true
+    api_key:
+      secure: Twy5ufF5FWKhGzExyMPujCNFoVmX/dc4xPagR5ItY+o8CSTYAsmJ5x5AAGI0K+fK3ROM/pyMXYU4aweBlV3yuBVgnsOZMDjsHPr/15El0dOVGyTRhmFBltRmlJIC52Y+TT74IBPubcpC3K68EMDdxT1s0BNkZbsEhbqfQR62aJGBfO/0b/dRhVuKEfjudLEtC8i3gfzVTmJ5HRwjDF44Vs+ffFGDeGzCzXLFa2tMcAsIH1cHqBJzxg+eYS8oEJudFy18i5Y3e8AzNLoUydlydM/um80Ej2fIY25iuoBDG0QzbcvsmGm8En7mfdmHFGzzNBA5C7TZWbmJZmb0dD3bnucrzwzdDLYDjEHdaDgpKBel9Y9o6YaqaBZAxNnS6UBTiO72X2zdbyen4gsKvoX0tWEdqycwnfn16AgnBK8t1o6gK/kd9URuzwxYWLZjctwJNAEFnv5TWoI588Sozv4/KXybd16zLrFecV/AXcOJJbrCooTpASv8Un7HCUQ7C9S5kqySjCCJrZ6kZueGLlOeJWQ5upyk/K0U7VVzh0CFAHov0lFXN6qPIRkcSAPmB3wk3MOMzr68lDudmZY0Ip9EdczyL7KizZ+sdNnOcs4MAOCZqXW/7nG6a8qRHLnadeIpDtVfc/YTelJE/X7pH4M9NZxpDO+P2lEktxgnLSeCpOo=
+    file: dist.zip
+    on:
+      branch: master
+      tags: true
+      repo: flekschas/regl-scatterplot
+  - provider: npm
+    skip_cleanup: true
+    email: service@lekschas.de
+    api_key:
+      secure: MgHt+LseCrHxFdbp43vdNJBX0KP9oXuOKu43U0HvcJIdOmequfwnELsvy8tSQEddX4yyXEcRU9LjMjeG4WeVAFvBHunlWs8mYb9qnuc796W7l6WTgE/lfYELwWxFnYN/UqCxpO/RVFJaqprpZLZT9TxQqqZqOijAEb9XEoHKKOhv8CscYDKt1+TAcW0Xks50r3lRhPmhWWqjuPNtFSRyHJgSifAyK2GsGxPMwu7pfwOmLM3LPl96pXFdNXtonlOsfMPNvA/7wdPUpIlRxfJtHuJxk593ld12pvVahwZfwJkS8XMeh2lQF1njqGXOf2yH1LIxKTNK1N0wms2dKESrsHw3jVeS5ORD++ad2VxL0rXLPG/9pyJZSoTtFaoE6w+DwKhKh1Rhxs8RmaMYktj41lmwY1JMw2ptpkIRrhhqo6aQJYu6rt8FqI/QO9PhJh8JloBdnhQ9yMqRIA+TOwxmwQ5c7FymVi/7vfv97dJyBadnc+g5Xz7Xh6Luo+8JAwz3+qK7dOrMYKWdjshaYSUNSnfno5YsWkg/IAiVcTFq+C6u/mHWuaym6fBR08tABjM+/AZAE6I9qN9tYiFAuh4nTMc0npuuBq7e6bfRzJcP3L/5JZmQkmDHv1UJ3hCM3xkhh/8jZSpP3o0Ja7WFQI9jLgtWdBkQZsbzkpvTgGZ3HdM=
+    on:
+      branch: master
+      tags: true
+      repo: flekschas/regl-scatterplot
