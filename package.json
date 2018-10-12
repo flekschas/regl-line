@@ -12,8 +12,12 @@
   "license": "MIT",
   "main": "dist/regl-line.js",
   "module": "src/index.js",
+  "unpkg": "dist/regl-line.min.js",
+  "jsdelivr": "dist/regl-line.min.js",
   "files": [
     "src/index.js",
+    "src/line.fs",
+    "src/line.vs",
     "dist/regl-line.js",
     "dist/regl-line.min.js"
   ],
