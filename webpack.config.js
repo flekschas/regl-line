@@ -4,7 +4,8 @@ module.exports = (env, argv) => ({
   entry: "./example/index.js",
   output: {
     path: `${__dirname}/docs`,
-    publicPath: argv.mode === "production" ? "./" : "/"
+    publicPath: argv.mode === "production" ? "./" : "/",
+    filename: "example.js"
   },
   devServer: {
     contentBase: "./example"
