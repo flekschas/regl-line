@@ -66,8 +66,8 @@ Create a line instance.
 
 Args:
 
-1 `regl` [regl]: regl instance
-2 `options` [object]:
+1. `regl` [regl]: Regl instance to be used for drawing the line.
+2. `options` [object]: An object with the following props to customize the line creator.
    - `projection` [[mat4](http://glmatrix.net/docs/module-mat4.html)]: projection matrix (Defaut: _identity matrix_)
    - `model` [[mat4](http://glmatrix.net/docs/module-mat4.html)]: model matrix (Defaut: _identity matrix_)
    - `view` [[mat4](http://glmatrix.net/docs/module-mat4.html)]: view matrix (Defaut: _identity matrix_)
@@ -75,7 +75,7 @@ Args:
    - `widths` [array]: flat array of point-wise widths, i.e., the line width at every point. (Defaut: `[]`)
    - `color` [array]: a quadruple of floats (RGBA) randing in [0,1] defining the color of the line. (Defaut: `[0.8, 0.5, 0, 1]`)
    - `width` [number]: uniform line width scalar. This number sets the base line width. (Defaut: `1`)
-   - `miter` [boolean]: if `true` line segments are [miter joined](https://en.wikipedia.org/wiki/Miter_joint). (Defaut: `1`)
+   - `miter` [boolean]: if `true` line segments are [miter joined](https://en.wikipedia.org/wiki/Miter_joint). (Defaut: `true`)
    - `is2d` [boolean]: if `true` points are expected to have only x,y coordinates otherwise x,y,z coordinates are expected. (Defaut: `false`)
    - `zPos2d` [number]: if `is2d` is `true` this value defines the uniform z coordinate. (Defaut: `0`)
 
