@@ -1,3 +1,7 @@
+## v0.1.2
+
+- Multiply line width by `window.devicePixelRatio`
+
 ## v0.1.1
 
 - Add missing shader files to the npm release

@@ -148,7 +148,8 @@ const createLine = (
         aspectRatio: ({ viewportWidth, viewportHeight }) =>
           viewportWidth / viewportHeight,
         color,
-        width: ({ viewportWidth }) => width / viewportWidth,
+        width: ({ viewportWidth }) =>
+          (width / viewportWidth) * window.devicePixelRatio,
         miter
       },
       elements: () => elements,
