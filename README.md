@@ -73,7 +73,7 @@ Args:
    - `view` [[mat4](http://glmatrix.net/docs/module-mat4.html)]: view matrix (Defaut: _identity matrix_)
    - `points` [array]: flat list of coordinates alternating x,y if `is2d` is `true` or x,y,z. (Defaut: `[]`)
    - `widths` [array]: flat array of point-wise widths, i.e., the line width at every point. (Defaut: `[]`)
-   - `color` [array]: a quadruple of floats (RGBA) randing in [0,1] defining the color of the line. (Defaut: `[0.8, 0.5, 0, 1]`)
+   - `color` [array]: a quadruple of floats (RGBA) ranging in [0,1] defining the color of the line. (Defaut: `[0.8, 0.5, 0, 1]`)
    - `width` [number]: uniform line width scalar. This number sets the base line width. (Defaut: `1`)
    - `miter` [boolean]: if `true` line segments are [miter joined](https://en.wikipedia.org/wiki/Miter_joint). (Defaut: `true`)
    - `is2d` [boolean]: if `true` points are expected to have only x,y coordinates otherwise x,y,z coordinates are expected. (Defaut: `false`)
@@ -139,6 +139,6 @@ Args:
 Args:
 
 1. `option` [object]:
-   - `color` [array]: a quadruple of floats (RGBA) randing in [0,1] defining the color of the line.
+   - `color` [array]: a quadruple of floats (RGBA) ranging in [0,1] defining the color of the line.
    - `width` [number]: uniform line width scalar. This number sets the base line width.
    - `miter` [boolean]: if `true` line segments are [miter joined](https://en.wikipedia.org/wiki/Miter_joint).
