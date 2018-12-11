@@ -1,3 +1,7 @@
+## v0.1.3
+
+- Enable alpha blending
+
 ## v0.1.2
 
 - Multiply line width by `window.devicePixelRatio`
