@@ -141,13 +141,22 @@ const createLine = (
     drawLine = regl({
       attributes,
       depth: { enable: !is2d },
+      blend: {
+        enable: true,
+        func: {
+          srcRGB: "src alpha",
+          srcAlpha: "one",
+          dstRGB: "one minus src alpha",
+          dstAlpha: "one minus src alpha"
+        }
+      },
       uniforms: {
         projection: regl.prop("projection"),
         model: regl.prop("model"),
         view: regl.prop("view"),
         aspectRatio: ({ viewportWidth, viewportHeight }) =>
           viewportWidth / viewportHeight,
-        color,
+        color: () => color,
         width: ({ viewportWidth }) =>
           (width / viewportWidth) * window.devicePixelRatio,
         miter
