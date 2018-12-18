@@ -1,3 +1,7 @@
+## v0.1.4
+
+- Either use the project and view matrix from the context or props
+
 ## v0.1.3
 
 - Enable alpha blending
