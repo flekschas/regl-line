@@ -151,9 +151,9 @@ const createLine = (
         }
       },
       uniforms: {
-        projection: regl.prop("projection"),
-        model: regl.prop("model"),
-        view: regl.prop("view"),
+        projection: (context, props) => context.projection || props.projection,
+        model: (context, props) => context.model || props.model,
+        view: (context, props) => context.view || props.view,
         aspectRatio: ({ viewportWidth, viewportHeight }) =>
           viewportWidth / viewportHeight,
         color: () => color,
