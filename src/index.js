@@ -1,23 +1,29 @@
 import FRAG_SHADER from "./line.fs";
 import VERT_SHADER from "./line.vs";
 
-const { push, unshift } = Array.prototype;
+const { push, splice } = Array.prototype;
 
 const I = new Float32Array([1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]);
 const FLOAT_BYTES = Float32Array.BYTES_PER_ELEMENT;
 
-const createMesh = (numPoints, width, buffer = []) => {
-  for (let i = 0; i < numPoints - 1; i++) {
-    const a = width + i * 2;
-    const b = a + 1;
-    const c = a + 2;
-    const d = a + 3;
-    buffer.push(a, b, c, c, b, d);
-  }
+const createMesh = (numPointsPerLine, buffer = []) => {
+  let numPrevPoints = 0;
+  numPointsPerLine.forEach(numPoints => {
+    for (let i = 0; i < numPoints - 1; i++) {
+      const a = numPrevPoints + i * 2; // `2`  because we duplicated all points
+      const b = a + 1;
+      const c = a + 2;
+      const d = a + 3;
+      buffer.push(a, b, c, c, b, d);
+    }
+    // Each line adds an additional start and end point, hence, `numPoints + 2`
+    // And again, since all points are duplicated, we have `* 2`
+    numPrevPoints += (numPoints + 2) * 2;
+  });
   return buffer;
 };
 
-const buffer = {
+const Buffer = {
   duplicate(buffer, stride = 1, dupScale = 1) {
     const out = [];
     const component = new Array(stride * 2);
@@ -41,24 +47,12 @@ const buffer = {
     return buffer;
   },
 
-  pushElement(buffer, elementIndex, stride) {
+  copyElement(buffer, sourceElementIndex, targetIndex, stride) {
     const component = new Array(stride);
-    const ai = elementIndex * stride;
-    for (let i = 0; i < stride; i++) {
-      component[i] = buffer[ai + i];
-    }
-    push.apply(buffer, component);
-    return buffer;
-  },
-
-  // Copy a component to the beginning of the buffer
-  unshiftElement(buffer, elementIndex, stride) {
-    const component = new Array(stride);
-    const ai = elementIndex * stride;
-    for (let i = 0; i < stride; i++) {
-      component[i] = buffer[ai + i];
-    }
-    unshift.apply(buffer, component);
+    const ai = sourceElementIndex * stride;
+    // Copy source element component wise
+    for (let i = 0; i < stride; i++) component[i] = buffer[ai + i];
+    splice.call(buffer, targetIndex * stride, 0, ...component);
     return buffer;
   },
 
@@ -96,7 +90,10 @@ const createLine = (
     return;
   }
 
+  let pointsFlat = points.flatMap(x => x);
+  let numLines;
   let numPoints;
+  let numPointsPerLine;
   let numPointsTotal;
   let pointsPadded;
   let pointsDup;
@@ -107,7 +104,6 @@ const createLine = (
   let attributes;
   let elements;
   let drawLine;
-
   let dim = is2d ? 2 : 3;
 
   const init = () => {
@@ -168,34 +164,41 @@ const createLine = (
   };
 
   const prepare = () => {
-    if (points.length % dim > 0) {
+    if (numLines === 1 && points.length % dim > 0) {
       console.warn(
         `The length of points (${numPoints}) does not match the dimensions (${dim}). Incomplete points are ignored.`
       );
     }
 
     // Copy all points belonging to complete points
-    pointsPadded = points.slice(0, numPoints * dim);
+    pointsPadded = pointsFlat.slice(0, numPoints * dim);
 
     // Add the missing z point
     if (is2d) {
-      pointsPadded = buffer.increaseStride(pointsPadded, 2, 3, zPos2d);
+      pointsPadded = Buffer.increaseStride(pointsPadded, 2, 3, zPos2d);
     }
 
-    if (widths.length !== numPoints) widths = new Array(numPoints).fill(1);
+    if (widths.length !== numPoints)
+      widths = new Array(numPoints + (numLines - 1) * 2).fill(1);
 
-    // duplicate the first and last point. E.g., [1,2,3] -> [1,1,2,3,3]
-    // copy the last point to the end
-    buffer.pushElement(pointsPadded, numPoints - 1, 3);
-    // copy the first point to the beginning
-    buffer.unshiftElement(pointsPadded, 0, 3);
+    let k = 0;
+    numPointsPerLine.forEach(n => {
+      // For each line, duplicate the first and last point.
+      // E.g., [1,2,3] -> [1,1,2,3,3]
+      // First, copy the last point to the end
+      Buffer.copyElement(pointsPadded, k + n - 1, k + n - 1, 3);
+      // Second, copy the first point to the beginning
+      Buffer.copyElement(pointsPadded, k, k, 3);
+
+      k += n + 2;
+    });
 
     // duplicate each point for the positive and negative width (see below)
-    pointsDup = new Float32Array(buffer.duplicate(pointsPadded, 3));
+    pointsDup = new Float32Array(Buffer.duplicate(pointsPadded, 3));
     // duplicate each width such that we have a positive and negative width
-    widthsDup = buffer.duplicate(widths, 1, -1);
+    widthsDup = Buffer.duplicate(widths, 1, -1);
     // create the line mesh, i.e., the vertex indices
-    indices = createMesh(numPoints, 0);
+    indices = createMesh(numPointsPerLine);
 
     pointBuffer({
       usage: "dynamic",
@@ -262,15 +265,21 @@ const createLine = (
 
   const setPoints = (newPoints = [], newWidths = widths, newIs2d = is2d) => {
     points = newPoints;
+    pointsFlat = points.flatMap(x => x);
     is2d = newIs2d;
-
     dim = is2d ? 2 : 3;
-    numPoints = Math.floor(points.length / dim);
-    numPointsTotal = numPoints + 2;
+
+    numLines = Array.isArray(points[0]) ? points.length : 1;
+    numPointsPerLine =
+      numLines > 1
+        ? points.map(pts => Math.floor(pts.length / dim))
+        : [Math.floor(points.length / dim)];
+    numPoints = numPointsPerLine.reduce((n, nPts) => n + nPts, 0);
+    numPointsTotal = numPoints + 2 * numLines;
 
     if (newWidths.length === numPoints) widths = newWidths;
 
-    if (points && points.length > 1) {
+    if (points && numPoints > 1) {
       prepare();
     } else {
       clear();
