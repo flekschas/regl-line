@@ -43,10 +43,9 @@ const lineSimple = createLine(regl, {
   width: 2,
   color: [0.8, 0.2, 0.0, 1.0],
   is2d: true,
+  // Flat list of normalized-device coordinates
   points: [-0.9, +0.9, +0.9, +0.9, +0.9, -0.9, -0.9, -0.9, -0.9, +0.85]
 });
-
-line.setPoints();
 
 // Draw
 regl.frame(() => {
@@ -56,11 +55,24 @@ regl.frame(() => {
 });
 ```
 
+Need to **draw multiple lines** at once? Just pass a list of lists of point coordinates to `setPoints()` or the constructor.
+
+```javascript
+lineSimple.setPoints([
+  [-0.8, +0.9, +0.8, +0.9], // top line
+  [+0.9, +0.8, +0.9, -0.8], // right line
+  [+0.8, -0.9, -0.8, -0.9], // bottom line
+  [-0.9, -0.8, -0.9, +0.8] // left line
+]);
+```
+
 See a complete example at [example/index.js](example/index.js).
 
 ## API
 
-#### createLine(regl, options)
+### Constructor
+
+<a name="createLine" href="#createLine">#</a> <b>createLine</b>(<i>regl</i>, <i>options = {}</i>)
 
 Create a line instance.
 
@@ -71,7 +83,7 @@ Args:
    - `projection` [[mat4](http://glmatrix.net/docs/module-mat4.html)]: projection matrix (Defaut: _identity matrix_)
    - `model` [[mat4](http://glmatrix.net/docs/module-mat4.html)]: model matrix (Defaut: _identity matrix_)
    - `view` [[mat4](http://glmatrix.net/docs/module-mat4.html)]: view matrix (Defaut: _identity matrix_)
-   - `points` [array]: flat list of coordinates alternating x,y if `is2d` is `true` or x,y,z. (Defaut: `[]`)
+   - `points` [array]: flat list of normalized-device coordinates alternating x,y if `is2d` is `true` or x,y,z. (Defaut: `[]`). To draw multiple lines at once, pass in a list of lists of coordinates.
    - `widths` [array]: flat array of point-wise widths, i.e., the line width at every point. (Defaut: `[]`)
    - `color` [array]: a quadruple of floats (RGBA) ranging in [0,1] defining the color of the line. (Defaut: `[0.8, 0.5, 0, 1]`)
    - `width` [number]: uniform line width scalar. This number sets the base line width. (Defaut: `1`)
@@ -81,60 +93,63 @@ Args:
 
 Returns: `line` instance.
 
-#### line.clear()
+### Methods
+
+<a name="line.clear" href="#line.clear">#</a> line.<b>clear</b>()
 
 Clears all of the data to remove the drawn line.
 
-#### line.destroy()
+<a name="line.destroy" href="#line.destroy">#</a> line.<b>destroy</b>()
 
 Destroys all related objects to free memory.
 
-#### line.draw({ projection, model, view })
+<a name="line.draw" href="#line.draw">#</a> line.<b>draw</b>({ <i>projection</i>, <i>model</i>, <i>view</i> })
 
 Draws the line according to the `projection`, `model`, and `view` matrices.
 
 Args:
 
 1 `options` [object]:
-   - `projection` [[mat4](http://glmatrix.net/docs/module-mat4.html)]: projection matrix (Defaut: _identity matrix_)
-   - `model` [[mat4](http://glmatrix.net/docs/module-mat4.html)]: model matrix (Defaut: _identity matrix_)
-   - `view` [[mat4](http://glmatrix.net/docs/module-mat4.html)]: view matrix (Defaut: _identity matrix_)
 
-#### line.getBuffer()
+- `projection` [[mat4](http://glmatrix.net/docs/module-mat4.html)]: projection matrix (Defaut: _identity matrix_)
+- `model` [[mat4](http://glmatrix.net/docs/module-mat4.html)]: model matrix (Defaut: _identity matrix_)
+- `view` [[mat4](http://glmatrix.net/docs/module-mat4.html)]: view matrix (Defaut: _identity matrix_)
+
+<a name="line.getBuffer" href="#line.getBuffer">#</a> line.<b>getBuffer</b>()
 
 Get a reference to the point and width buffer object. This can be useful for efficient animations.
 
 Returns: `{ points, widths }`. `points` and `widths` are [Regl buffers](http://regl.party/api#buffers).
 
-#### line.getData()
+<a name="line.getData" href="#line.getData">#</a> line.<b>getData</b>()
 
 Get a reference to the typed data arrays of the point and width buffer.
 
 Returns: `{ points, widths }`. `points` and `widths` are [typed arrays](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Typed_arrays) containing the buffer data.
 
-#### line.getPoints()
+<a name="line.getPoints" href="#line.getPoints">#</a> line.<b>getPoints</b>()
 
 Get the original list of points defining the line.
 
 Return: flat `array` of points
 
-#### line.getStyle()
+<a name="line.getStyle" href="#line.getStyle">#</a> line.<b>getStyle</b>()
 
 Get all the style settings.
 
 Returns: `{ color, miter, width }`
 
-#### line.setPoints(points, widths, is2d)
+<a name="line.setPoints" href="#line.setPoints">#</a> line.<b>setPoints</b>(<i>points</i>, <i>widths</i>, <i>is2d</i>)
 
 Set points defining the line, the point-wise widths, and change the dimensionality.
 
 Args:
 
-1. `points` [array]: flat list of coordinates alternating x,y if `is2d` is `true` or x,y,z.
+1. `points` [array]: flat list of normalized-device coordinates alternating x,y if `is2d` is `true` or x,y,z. To draw multiple lines at once, pass in a list of lists of coordinates.
 2. `widths` [array]: flat array of point-wise widths, i.e., the line width at every point.
 3. `is2d` [boolean]: if `true` points are expected to have only x,y coordinates otherwise x,y,z coordinates are expected.
 
-#### line.setStyle({ color, miter, width })
+<a name="line.setStyle" href="#line.setStyle">#</a> line.<b>setStyle</b>({ <i>color</i>, <i>miter</i>, <i>width</i>})
 
 Args:
 

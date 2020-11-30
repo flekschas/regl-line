@@ -1,3 +1,7 @@
+## v0.2.0
+
+- Allow drawing multiple lines at once using `setPoints([[...],[...]])`
+
 ## v0.1.4
 
 - Either use the project and view matrix from the context or props
