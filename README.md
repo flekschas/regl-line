@@ -69,7 +69,57 @@ lineSimple.setPoints([
 ]);
 ```
 
-See a complete example at [example/index.js](example/index.js).
+To give each line an individual color, you have to do 2 things. First, you have to specify the colors you want to use.
+
+```javascript
+lineSimple.setStyle({
+  color: [
+    [0, 1, 1, 1], // cyan
+    [1, 1, 0, 1] // yellow
+  ]
+});
+```
+
+Finally, when you set the points, specify an array indexing into your colors.
+
+```javascript
+lineSimple.setPoints(points, {
+  colorIndices: [
+    0, // top line will be cyan
+    1, // right line will be yellow
+    0, // bottom line will be cyan
+    1 // left line will be yellow
+  ]
+});
+```
+
+You could even go one step further and specify the color for each point on the line using a list of list.
+
+```javascript
+lineSimple.setPoints(points, {
+  colorIndices: [
+    [0, 0, 1, 1], // top line will cyan to yellow
+    [1, 1, 0, 0], // right line will yellow to cyan
+    [0, 1, 0, 1], // bottom line will be cyan, yellow, cyan, yellow
+    [0, 1, 1, 0] // left line will be cyan, yellow, cyan
+  ]
+});
+```
+
+Similarly, you can adjust the line width using
+
+```javascript
+lineSimple.setPoints(points, {
+  widths: [
+    1, // top line will have a width of `width` * 1
+    2, // right line will have a width of `width` * 2
+    3, // bottom line will have a width of `width` * 3
+    4 // left line will have a width of `width` * 4
+  ]
+});
+```
+
+For a complete example, see [example/index.js](example/index.js).
 
 ## API
 
