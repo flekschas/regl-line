@@ -6,10 +6,14 @@
 [![code style prettier](https://img.shields.io/badge/code_style-prettier-80a1ff.svg)](https://github.com/prettier/prettier)
 [![regl-line demo](https://img.shields.io/badge/demo-online-f264ab.svg)](https://flekschas.github.io/regl-line/)
 
-> A line creator for flat 2D and 3D lines.
+> A regl function to conveniently draw flat 2D and 3D lines.
 
 <p align="center">
   <img src="https://flekschas.github.io/regl-line/teaser.gif" />
+</p>
+
+<p align="center">
+  <a href="https://flekschas.github.io/regl-line/">Click here to see ☝️ in action!</a>
 </p>
 
 This small library is inspired by [Regl's line example](http://regl.party/examples?line) and Matt Deslauriers' [wonderful blog post on drawing lines in WebGL](https://mattdesl.svbtle.com/drawing-lines-is-hard).
