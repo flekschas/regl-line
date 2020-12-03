@@ -6,6 +6,9 @@ uniform mat4 model;
 uniform mat4 view;
 uniform float aspectRatio;
 
+uniform sampler2D colorTex;
+uniform float colorTexRes;
+uniform float colorTexEps;
 uniform float width;
 uniform int miter;
 
@@ -13,6 +16,9 @@ attribute vec3 prevPosition;
 attribute vec3 currPosition;
 attribute vec3 nextPosition;
 attribute float offsetScale;
+attribute float colorIndex;
+
+varying vec4 color;
 
 void main() {
   vec2 aspectVec = vec2(aspectRatio, 1.0);
@@ -55,6 +61,15 @@ void main() {
   normal.x /= aspectRatio;
   vec4 offset = vec4(normal * offsetScale, 0.0, 0.0);
   gl_Position = currProjected + offset;
+
+  // Get color from texture
+  float colorRowIndex = floor((colorIndex + colorTexEps) / colorTexRes);
+  vec2 colorTexIndex = vec2(
+    (colorIndex / colorTexRes) - colorRowIndex + colorTexEps,
+    colorRowIndex / colorTexRes + colorTexEps
+  );
+
+  color = texture2D(colorTex, colorTexIndex);
 }`;
 
 export default VERTEX_SHADER;

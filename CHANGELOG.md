@@ -1,3 +1,12 @@
+## v0.3.0
+
+- Add support for multi-colored lines
+- Add support for drawing large number of lines (this assumes you enabled the `OES_element_index_uint` [extension in Regl](https://github.com/regl-project/regl/blob/master/API.md#all-initialization-options))
+
+**Breaking Changes:**
+
+- `setPoints(points, widths, is2d)` changed to `setPoints(points, options = { colorIndices, widths, is2d })`
+
 ## v0.2.0
 
 - Allow drawing multiple lines at once using `setPoints([[...],[...]])`
