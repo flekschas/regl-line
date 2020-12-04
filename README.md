@@ -42,7 +42,7 @@ const regl = createRegl(canvas);
 const camera = createCamera(canvas);
 
 // Create a line
-const lineSimple = createLine(regl, {
+const line = createLine(regl, {
   width: 2,
   color: [0.8, 0.2, 0.0, 1.0],
   is2d: true,
@@ -58,68 +58,78 @@ regl.frame(() => {
 });
 ```
 
-Need to **draw multiple lines** at once? Just pass a list of lists of point coordinates to `setPoints()` or the constructor.
+For a complete example, see [example/index.js](example/index.js).
+
+### Draw Multiple Lines At Once
+
+To draw multiple lines, you can pass a list of lists of flat point coordinates to `setPoints()` or the constructor.
 
 ```javascript
-lineSimple.setPoints([
+line.setPoints([
   [-0.8, +0.9, +0.8, +0.9], // top line
   [+0.9, +0.8, +0.9, -0.8], // right line
   [+0.8, -0.9, -0.8, -0.9], // bottom line
-  [-0.9, -0.8, -0.9, +0.8] // left line
+  [-0.9, -0.8, -0.9, +0.8], // left line
 ]);
 ```
 
-To give each line an individual color, you have to do 2 things. First, you have to specify the colors you want to use.
+### Variable Line Color
+
+To give each line an individual color, you have to do 2 things. First, you have to specify **all** the colors you plan to use.
 
 ```javascript
-lineSimple.setStyle({
+line.setStyle({
   color: [
     [0, 1, 1, 1], // cyan
-    [1, 1, 0, 1] // yellow
+    [1, 1, 0, 1], // yellow
   ]
 });
 ```
 
-Finally, when you set the points, specify an array indexing into your colors.
+Next, when you set the points (with `setPoints()`), specify an array of indices to associate lines with your previously specified colors.
 
 ```javascript
-lineSimple.setPoints(points, {
+line.setPoints(points, {
   colorIndices: [
-    0, // top line will be cyan
-    1, // right line will be yellow
+    0, //    top line will be cyan
+    1, //  right line will be yellow
     0, // bottom line will be cyan
-    1 // left line will be yellow
+    1, //   left line will be yellow
   ]
 });
 ```
 
-You could even go one step further and specify the color for each point on the line using a list of list.
+#### Color Gradient
+
+You could even go one step further and specify the color for each point on the line using a list of list of indices.
 
 ```javascript
-lineSimple.setPoints(points, {
+line.setPoints(points, {
   colorIndices: [
-    [0, 0, 1, 1], // top line will cyan to yellow
-    [1, 1, 0, 0], // right line will yellow to cyan
+    [0, 0, 1, 1], //    top line will cyan to yellow
+    [1, 1, 0, 0], //  right line will yellow to cyan
     [0, 1, 0, 1], // bottom line will be cyan, yellow, cyan, yellow
-    [0, 1, 1, 0] // left line will be cyan, yellow, cyan
+    [0, 1, 1, 0], //   left line will be cyan, yellow, cyan
   ]
 });
 ```
 
-Similarly, you can adjust the line width using
+### Variable Line Width
+
+To adjust, you can adjust the line width using
 
 ```javascript
-lineSimple.setPoints(points, {
+line.setPoints(points, {
   widths: [
-    1, // top line will have a width of `width` * 1
-    2, // right line will have a width of `width` * 2
-    3, // bottom line will have a width of `width` * 3
-    4 // left line will have a width of `width` * 4
+    1, //    top line will have a width of 1
+    2, //  right line will have a width of 2
+    3, // bottom line will have a width of 3
+    4, //   left line will have a width of 4
   ]
 });
 ```
 
-For a complete example, see [example/index.js](example/index.js).
+As with the [color gradient](#color-gradient) you can specify the width for each point on the line using a list of list of numbers.
 
 ## API
 
