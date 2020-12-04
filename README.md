@@ -180,15 +180,15 @@ Args:
 
 <a name="line.getBuffer" href="#line.getBuffer">#</a> line.<b>getBuffer</b>()
 
-Get a reference to the point and width buffer object. This can be useful for efficient animations.
+Get a reference to the point, width, and color index [buffer objects](http://regl.party/api#buffers). This can be useful for efficient animations.
 
-Returns: `{ points, widths }`. `points` and `widths` are [Regl buffers](http://regl.party/api#buffers).
+Returns: `{ points, widths, colorIndices }`
 
 <a name="line.getData" href="#line.getData">#</a> line.<b>getData</b>()
 
-Get a reference to the typed data arrays of the point and width buffer.
+Get a reference to the buffers' [typed data arrays](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Typed_arrays).
 
-Returns: `{ points, widths }`. `points` and `widths` are [typed arrays](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Typed_arrays) containing the buffer data.
+Returns: `{ points, widths, colorIndices }`
 
 <a name="line.getPoints" href="#line.getPoints">#</a> line.<b>getPoints</b>()
 
@@ -212,7 +212,7 @@ Args:
 2. `widths` [array]: flat array of point-wise widths, i.e., the line width at every point.
 3. `is2d` [boolean]: if `true` points are expected to have only x,y coordinates otherwise x,y,z coordinates are expected.
 
-<a name="line.setStyle" href="#line.setStyle">#</a> line.<b>setStyle</b>({ <i>color</i>, <i>miter</i>, <i>width</i>})
+<a name="line.setStyle" href="#line.setStyle">#</a> line.<b>setStyle</b>({ <i>color</i>, <i>miter</i>, <i>width</i> })
 
 Args:
 
