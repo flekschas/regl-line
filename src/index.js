@@ -1,5 +1,5 @@
-import FRAG_SHADER from "./line.fs";
-import VERT_SHADER from "./line.vs";
+import FRAG_SHADER from './line.fs';
+import VERT_SHADER from './line.vs';
 
 const { push, splice } = Array.prototype;
 
@@ -8,7 +8,7 @@ const FLOAT_BYTES = Float32Array.BYTES_PER_ELEMENT;
 
 const createMesh = (numPointsPerLine, buffer = []) => {
   let numPrevPoints = 0;
-  numPointsPerLine.forEach(numPoints => {
+  numPointsPerLine.forEach((numPoints) => {
     for (let i = 0; i < numPoints - 1; i++) {
       const a = numPrevPoints + i * 2; // `2`  because we duplicated all points
       const b = a + 1;
@@ -67,7 +67,7 @@ const Buffer = {
       push.apply(out, component);
     }
     return out;
-  }
+  },
 };
 
 const createLine = (
@@ -83,18 +83,17 @@ const createLine = (
     widths = [],
     miter = 1,
     is2d = false,
-    zPos2d = 0
+    zPos2d = 0,
   } = {}
 ) => {
   if (!regl) {
-    console.error("Regl instance is undefined.");
+    console.error('Regl instance is undefined.');
     return;
   }
 
   let numLines;
   let numPoints;
   let numPointsPerLine;
-  let numPointsTotal;
   let pointsPadded;
   let pointsDup;
   let colorIndicesDup;
@@ -119,22 +118,22 @@ const createLine = (
       prevPosition: {
         buffer: () => pointBuffer,
         offset: 0,
-        stride: FLOAT_BYTES * 3
+        stride: FLOAT_BYTES * 3,
       },
       currPosition: {
         buffer: () => pointBuffer,
         // note that each point is duplicated, hence we need to skip over the first two
         offset: FLOAT_BYTES * 3 * 2,
-        stride: FLOAT_BYTES * 3
+        stride: FLOAT_BYTES * 3,
       },
       nextPosition: {
         buffer: () => pointBuffer,
         // note that each point is duplicated, hence we need to skip over the first four
         offset: FLOAT_BYTES * 3 * 4,
-        stride: FLOAT_BYTES * 3
+        stride: FLOAT_BYTES * 3,
       },
       offsetScale: () => widthBuffer,
-      colorIndex: () => colorIndexBuffer
+      colorIndex: () => colorIndexBuffer,
     };
 
     elements = regl.elements();
@@ -145,11 +144,11 @@ const createLine = (
       blend: {
         enable: true,
         func: {
-          srcRGB: "src alpha",
-          srcAlpha: "one",
-          dstRGB: "one minus src alpha",
-          dstAlpha: "one minus src alpha"
-        }
+          srcRGB: 'src alpha',
+          srcAlpha: 'one',
+          dstRGB: 'one minus src alpha',
+          dstAlpha: 'one minus src alpha',
+        },
       },
       uniforms: {
         projection: (context, props) => context.projection || props.projection,
@@ -162,11 +161,11 @@ const createLine = (
         colorTexEps: () => 0.5 / colorTexRes,
         width: ({ viewportWidth }) =>
           (width / viewportWidth) * window.devicePixelRatio,
-        miter
+        miter,
       },
       elements: () => elements,
       vert: VERT_SHADER,
-      frag: FRAG_SHADER
+      frag: FRAG_SHADER,
     });
   };
 
@@ -194,7 +193,7 @@ const createLine = (
     let finalWidths = widths.slice();
 
     let k = 0;
-    numPointsPerLine.forEach(n => {
+    numPointsPerLine.forEach((n) => {
       const lastPointIdx = k + n - 1;
       // For each line, duplicate the first and last point.
       // E.g., [1,2,3] -> [1,1,2,3,3]
@@ -221,34 +220,34 @@ const createLine = (
     indices = createMesh(numPointsPerLine);
 
     pointBuffer({
-      usage: "dynamic",
-      type: "float",
+      usage: 'dynamic',
+      type: 'float',
       // 3 because its a 3-vector and 2 because each point is duplicated
       length: pointsDup.length * FLOAT_BYTES,
-      data: pointsDup
+      data: pointsDup,
     });
 
     widthBuffer({
-      usage: "dynamic",
-      type: "float",
+      usage: 'dynamic',
+      type: 'float',
       // 1 because its a scalar and 2 because each width is duplicated
       length: widthsDup.length * FLOAT_BYTES,
-      data: widthsDup
+      data: widthsDup,
     });
 
     colorIndexBuffer({
-      usage: "dynamic",
-      type: "float",
+      usage: 'dynamic',
+      type: 'float',
       // 1 because its a scalar and 2 because each width is duplicated
       length: colorIndicesDup.length * FLOAT_BYTES,
-      data: colorIndicesDup
+      data: colorIndicesDup,
     });
 
     elements({
-      primitive: "triangles",
-      usage: "dynamic",
-      type: indices.length > 2 ** 16 ? "uint32" : "uint16",
-      data: indices
+      primitive: 'triangles',
+      usage: 'dynamic',
+      type: indices.length > 2 ** 16 ? 'uint32' : 'uint16',
+      data: indices,
     });
   };
 
@@ -271,7 +270,7 @@ const createLine = (
   const draw = ({
     projection: newProjection,
     model: newModel,
-    view: newView
+    view: newView,
   } = {}) => {
     // cache the view-defining matrices
     if (newProjection) {
@@ -310,7 +309,7 @@ const createLine = (
     {
       colorIndices: newColorIndices = colorIndices,
       widths: newWidths = widths,
-      is2d: newIs2d = is2d
+      is2d: newIs2d = is2d,
     } = {}
   ) => {
     points = newPoints;
@@ -320,10 +319,9 @@ const createLine = (
     numLines = Array.isArray(points[0]) ? points.length : 1;
     numPointsPerLine =
       numLines > 1
-        ? points.map(pts => Math.floor(pts.length / dim))
+        ? points.map((pts) => Math.floor(pts.length / dim))
         : [Math.floor(points.length / dim)];
     numPoints = numPointsPerLine.reduce((n, nPts) => n + nPts, 0);
-    numPointsTotal = numPoints + 2 * numLines;
 
     colorIndices = getPerPointProperty(colorIndices, newColorIndices);
     widths = getPerPointProperty(widths, newWidths);
@@ -357,11 +355,11 @@ const createLine = (
 
     colorTex = regl.texture({
       data: rgba,
-      shape: [colorTexRes, colorTexRes, 4]
+      shape: [colorTexRes, colorTexRes, 4],
     });
   };
 
-  const setColor = newColor => {
+  const setColor = (newColor) => {
     color = newColor;
     if (colorTex) colorTex.destroy();
     createColorTexture();
@@ -372,7 +370,7 @@ const createLine = (
   const setStyle = ({
     color: newColor,
     miter: newMiter,
-    width: newWidth
+    width: newWidth,
   } = {}) => {
     if (newColor) setColor(newColor);
     if (newMiter) miter = newMiter;
@@ -382,13 +380,13 @@ const createLine = (
   const getBuffer = () => ({
     points: pointBuffer,
     widths: widthBuffer,
-    colorIndices: colorIndexBuffer
+    colorIndices: colorIndexBuffer,
   });
 
   const getData = () => ({
     points: pointsDup,
     widths: widthsDup,
-    colorIndices: colorIndicesDup
+    colorIndices: colorIndicesDup,
   });
 
   // initialize parameters
@@ -409,7 +407,7 @@ const createLine = (
     getData,
     getBuffer,
     getStyle,
-    setStyle
+    setStyle,
   };
 };
 
