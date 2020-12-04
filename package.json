@@ -1,6 +1,6 @@
 {
   "name": "regl-line",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "2D line generator for Regl",
   "author": "Fritz Lekschas",
   "keywords": [
