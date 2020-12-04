@@ -24,7 +24,7 @@
   "scripts": {
     "build": "rollup -c; webpack --config ./webpack.config.js --mode production; touch docs/.nojekyll",
     "lint": "eslint src example rollup.config.js webpack.config.js",
-    "deploy": "rm -rf docs; npm run build; gh-pages -d docs -t --git git",
+    "deploy": "rm -rf docs; npm run build; cp teaser.gif ./docs/; gh-pages -d docs -t --git git",
     "precommit": "pretty-quick --staged",
     "prepublishOnly": "npm run lint",
     "prerelease": "rm -rf dist/*; npm run build; zip -r dist.zip dist",
