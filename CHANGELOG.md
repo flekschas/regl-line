@@ -1,3 +1,7 @@
+## v0.3.1
+
+- Precalculate `projection * view * model` for speed
+
 ## v0.3.0
 
 - Add support for multi-colored lines

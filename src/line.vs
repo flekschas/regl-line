@@ -1,9 +1,7 @@
 // Vertex shader from https://mattdesl.svbtle.com/drawing-lines-is-hard
 // The MIT License (MIT) Copyright (c) 2015 Matt DesLauriers
 const VERTEX_SHADER = `
-uniform mat4 projection;
-uniform mat4 model;
-uniform mat4 view;
+uniform mat4 projectionViewModel;
 uniform float aspectRatio;
 
 uniform sampler2D colorTex;
@@ -22,10 +20,9 @@ varying vec4 color;
 
 void main() {
   vec2 aspectVec = vec2(aspectRatio, 1.0);
-  mat4 projViewModel = projection * view * model;
-  vec4 prevProjected = projViewModel * vec4(prevPosition, 1.0);
-  vec4 currProjected = projViewModel * vec4(currPosition, 1.0);
-  vec4 nextProjected = projViewModel * vec4(nextPosition, 1.0);
+  vec4 prevProjected = projectionViewModel * vec4(prevPosition, 1.0);
+  vec4 currProjected = projectionViewModel * vec4(currPosition, 1.0);
+  vec4 nextProjected = projectionViewModel * vec4(nextPosition, 1.0);
 
   // get 2D screen space with W divide and aspect correction
   vec2 prevScreen = prevProjected.xy / prevProjected.w * aspectVec;

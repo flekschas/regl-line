@@ -1,3 +1,5 @@
+import { mat4 } from 'gl-matrix';
+
 import FRAG_SHADER from './line.fs';
 import VERT_SHADER from './line.vs';
 
@@ -91,6 +93,8 @@ const createLine = (
     return;
   }
 
+  const pvm = new Float32Array(16);
+
   let numLines;
   let numPoints;
   let numPointsPerLine;
@@ -151,9 +155,16 @@ const createLine = (
         },
       },
       uniforms: {
-        projection: (context, props) => context.projection || props.projection,
-        model: (context, props) => context.model || props.model,
-        view: (context, props) => context.view || props.view,
+        projectionViewModel: (context, props) => {
+          const projection = context.projection || props.projection;
+          const model = context.model || props.model;
+          const view = context.view || props.view;
+          return mat4.multiply(
+            pvm,
+            projection,
+            mat4.multiply(pvm, view, model)
+          );
+        },
         aspectRatio: ({ viewportWidth, viewportHeight }) =>
           viewportWidth / viewportHeight,
         colorTex: () => colorTex,
