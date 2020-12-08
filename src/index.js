@@ -170,8 +170,9 @@ const createLine = (
         colorTex: () => colorTex,
         colorTexRes: () => colorTexRes,
         colorTexEps: () => 0.5 / colorTexRes,
-        width: ({ viewportWidth }) =>
-          (width / viewportWidth) * window.devicePixelRatio,
+        pixelRatio: ({ pixelRatio }) => pixelRatio,
+        width: ({ pixelRatio, viewportHeight, viewportWidth }) =>
+          (width / Math.max(viewportWidth, viewportHeight)) * pixelRatio,
         miter,
       },
       elements: () => elements,

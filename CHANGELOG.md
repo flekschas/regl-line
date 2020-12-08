@@ -1,6 +1,7 @@
 ## v0.3.1
 
-- Precalculate `projection * view * model` for speed
+- Pre-calculate `projection * view * model` for speed
+- Fix an issue with the pixel ratio-aware line width
 
 ## v0.3.0
 
