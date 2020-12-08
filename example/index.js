@@ -1,9 +1,8 @@
-import createCamera from "canvas-orbit-camera";
-import createRegl from "regl";
-import fit from "canvas-fit";
-import { mat4 } from "gl-matrix";
+import createCamera from 'canvas-orbit-camera';
+import createRegl from 'regl';
+import { mat4 } from 'gl-matrix';
 
-import createLine from "../src/index.js";
+import createLine from '../src/index.js';
 
 //------------------------------------------------------------------------------
 // Utilities
@@ -33,7 +32,7 @@ const mapElement = (buffer, elementIndex, stride, map) => {
 // Init
 //------------------------------------------------------------------------------
 
-const canvas = document.getElementById("canvas");
+const canvas = document.getElementById('canvas');
 const regl = createRegl(canvas);
 const camera = createCamera(canvas);
 const makeProjection = (viewportWidth, viewportHeight) =>
@@ -85,11 +84,11 @@ const line = createLine(regl, {
   miter: 0,
   color: Array(numColors)
     .fill()
-    .map((v, i) => [0.8, 0.5 - (i / 255) * 2, i / 255, 1])
+    .map((v, i) => [0.8, 0.5 - (i / 255) * 2, i / 255, 1]),
 });
 const extent = 20;
 const numPoints = 256;
-const points = polarCurve([], numPoints, t => Math.sin(2.5 * t) * extent);
+const points = polarCurve([], numPoints, (t) => Math.sin(2.5 * t) * extent);
 const widths = new Array(numPoints).fill(1).map((v, i) => i / 2);
 const colorIndices = new Array(numPoints).fill().map((v, i) => i);
 
@@ -113,7 +112,7 @@ const cycleWidths = (buffer, tick) => {
   }
 };
 
-const cycleColors = buffer => {
+const cycleColors = (buffer) => {
   for (let i = 0; i < buffer.length; i++) {
     buffer[i] = (buffer[i] + 1) % numColors;
   }
@@ -122,7 +121,7 @@ const cycleColors = buffer => {
 regl.frame(({ tick, viewportWidth, viewportHeight }) => {
   regl.clear({
     color: [0, 0, 0, 1],
-    depth: 1
+    depth: 1,
   });
   // Update the camera
   camera.tick();
@@ -146,4 +145,13 @@ regl.frame(({ tick, viewportWidth, viewportHeight }) => {
   line.draw({ projection, view });
 });
 
-window.addEventListener("resize", fit(canvas), false);
+const resizeCanvas = () => {
+  const { height, width } = canvas.getBoundingClientRect();
+  canvas.height = height * window.devicePixelRatio;
+  canvas.width = width * window.devicePixelRatio;
+};
+
+window.addEventListener('resize', resizeCanvas, false);
+window.addEventListener('orientationchange', resizeCanvas, false);
+
+resizeCanvas();
