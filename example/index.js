@@ -44,13 +44,12 @@ const makeProjection = (viewportWidth, viewportHeight) =>
 
 // prettier-ignore
 const lineSimple = createLine(regl, {
-  width: 1000,
+  width: 100,
   color: [
-    [0, 1, 1],
-    [1, 1, 0]
+    [0.75, 0.75, 0.75],
+    [0.25, 0.25, 0.25]
   ],
   colorIndices: [0, 1, 0, 1],
-  opacities: [0.25, 0.5, 0.75, 1.0],
   is2d: true,
   points: [
     // top line
