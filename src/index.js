@@ -283,9 +283,6 @@ const createLine = (
       type: indices.length > 2 ** 16 ? 'uint32' : 'uint16',
       data: indices,
     });
-
-    console.log('useOpacity', useOpacity(), opacity);
-    console.log('useColorOpacity', +!useOpacity());
   };
 
   const clear = () => {
