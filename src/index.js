@@ -283,6 +283,9 @@ const createLine = (
       type: indices.length > 2 ** 16 ? 'uint32' : 'uint16',
       data: indices,
     });
+
+    console.log('useOpacity', useOpacity(), opacity);
+    console.log('useColorOpacity', +!useOpacity());
   };
 
   const clear = () => {
@@ -396,7 +399,7 @@ const createLine = (
     });
   };
 
-  const setColor = (newColor, newOpacity) => {
+  const setColor = (newColor, newOpacity = opacity) => {
     color = newColor;
     opacity = newOpacity;
     if (colorTex) colorTex.destroy();

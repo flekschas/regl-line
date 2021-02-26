@@ -1,3 +1,7 @@
+## v0.4.1
+
+- An issue that caused `opacity` to be set to `undefined`
+
 ## v0.4.0
 
 - Add `opacity` and `opacities` property. The `opacity` will override whatever you opacity have specified as the RGBA colors. `opacities` will in turn override `opacity` and allows you to adjust the opacity per line or line component.
