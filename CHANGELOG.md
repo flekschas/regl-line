@@ -1,3 +1,7 @@
+## v0.4.2
+
+- Expose opacities buffer via `getBuffer()` and the data via `getData()`
+
 ## v0.4.1
 
 - An issue that caused `opacity` to be set to `undefined`

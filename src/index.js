@@ -419,12 +419,14 @@ const createLine = (
   const getBuffer = () => ({
     points: pointBuffer,
     widths: widthBuffer,
+    opacities: opacityBuffer,
     colorIndices: colorIndexBuffer,
   });
 
   const getData = () => ({
     points: pointsDup,
     widths: widthsDup,
+    opacities: opacitiesDup,
     colorIndices: colorIndicesDup,
   });
 
