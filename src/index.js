@@ -81,6 +81,8 @@ const createLine = (
     points = [],
     colorIndices = [],
     color = [0.8, 0.5, 0, 1],
+    opacity = null,
+    opacities = [],
     width = 1,
     widths = [],
     miter = 1,
@@ -101,9 +103,11 @@ const createLine = (
   let pointsPadded;
   let pointsDup;
   let colorIndicesDup;
+  let opacitiesDup;
   let widthsDup;
   let indices;
   let pointBuffer;
+  let opacityBuffer;
   let widthBuffer;
   let colorTex;
   let colorTexRes;
@@ -113,8 +117,12 @@ const createLine = (
   let drawLine;
   let dim = is2d ? 2 : 3;
 
+  const useOpacity = () =>
+    +(opacities.length === numPoints || opacity !== null);
+
   const init = () => {
     pointBuffer = regl.buffer();
+    opacityBuffer = regl.buffer();
     widthBuffer = regl.buffer();
     colorIndexBuffer = regl.buffer();
 
@@ -136,6 +144,7 @@ const createLine = (
         offset: FLOAT_BYTES * 3 * 4,
         stride: FLOAT_BYTES * 3,
       },
+      opacity: () => opacityBuffer,
       offsetScale: () => widthBuffer,
       colorIndex: () => colorIndexBuffer,
     };
@@ -173,6 +182,8 @@ const createLine = (
         pixelRatio: ({ pixelRatio }) => pixelRatio,
         width: ({ pixelRatio, viewportHeight, viewportWidth }) =>
           (width / Math.max(viewportWidth, viewportHeight)) * pixelRatio,
+        useOpacity,
+        useColorOpacity: () => +!useOpacity(),
         miter,
       },
       elements: () => elements,
@@ -202,6 +213,10 @@ const createLine = (
     if (widths.length !== numPoints) widths = new Array(numPoints).fill(1);
 
     let finalColorIndices = colorIndices.slice();
+    let finalOpacities =
+      opacities.length === numPoints
+        ? opacities.slice()
+        : new Array(numPoints).fill(+opacity);
     let finalWidths = widths.slice();
 
     let k = 0;
@@ -216,6 +231,8 @@ const createLine = (
 
       Buffer.copyElement(finalColorIndices, lastPointIdx, lastPointIdx, 1);
       Buffer.copyElement(finalColorIndices, k, k, 1);
+      Buffer.copyElement(finalOpacities, lastPointIdx, lastPointIdx, 1);
+      Buffer.copyElement(finalOpacities, k, k, 1);
       Buffer.copyElement(finalWidths, lastPointIdx, lastPointIdx, 1);
       Buffer.copyElement(finalWidths, k, k, 1);
 
@@ -224,25 +241,31 @@ const createLine = (
 
     // duplicate each point for the positive and negative width (see below)
     pointsDup = new Float32Array(Buffer.duplicate(pointsPadded, 3));
-    // duplicate each width such that we have a positive and negative width
-    widthsDup = Buffer.duplicate(finalWidths, 1, -1);
-    // also duplicate each point's color index
+    // duplicate each color, opacity, and width such that we have a positive
+    // and negative width
     colorIndicesDup = Buffer.duplicate(finalColorIndices, 1);
+    opacitiesDup = Buffer.duplicate(finalOpacities, 1);
+    widthsDup = Buffer.duplicate(finalWidths, 1, -1);
     // create the line mesh, i.e., the vertex indices
     indices = createMesh(numPointsPerLine);
 
     pointBuffer({
       usage: 'dynamic',
       type: 'float',
-      // 3 because its a 3-vector and 2 because each point is duplicated
       length: pointsDup.length * FLOAT_BYTES,
       data: pointsDup,
+    });
+
+    opacityBuffer({
+      usage: 'dynamic',
+      type: 'float',
+      length: opacitiesDup.length * FLOAT_BYTES,
+      data: opacitiesDup,
     });
 
     widthBuffer({
       usage: 'dynamic',
       type: 'float',
-      // 1 because its a scalar and 2 because each width is duplicated
       length: widthsDup.length * FLOAT_BYTES,
       data: widthsDup,
     });
@@ -250,7 +273,6 @@ const createLine = (
     colorIndexBuffer({
       usage: 'dynamic',
       type: 'float',
-      // 1 because its a scalar and 2 because each width is duplicated
       length: colorIndicesDup.length * FLOAT_BYTES,
       data: colorIndicesDup,
     });
@@ -261,6 +283,8 @@ const createLine = (
       type: indices.length > 2 ** 16 ? 'uint32' : 'uint16',
       data: indices,
     });
+
+    console.log('useOpacity', useOpacity(), +!useOpacity());
   };
 
   const clear = () => {
@@ -320,6 +344,7 @@ const createLine = (
     newPoints = [],
     {
       colorIndices: newColorIndices = colorIndices,
+      opacities: newOpacities = opacities,
       widths: newWidths = widths,
       is2d: newIs2d = is2d,
     } = {}
@@ -336,6 +361,7 @@ const createLine = (
     numPoints = numPointsPerLine.reduce((n, nPts) => n + nPts, 0);
 
     colorIndices = getPerPointProperty(colorIndices, newColorIndices);
+    opacities = getPerPointProperty(opacities, newOpacities);
     widths = getPerPointProperty(widths, newWidths);
 
     if (points && numPoints > 1) {
@@ -356,11 +382,12 @@ const createLine = (
 
     colorTexRes = Math.max(2, Math.ceil(Math.sqrt(colors.length)));
     const rgba = new Uint8Array(colorTexRes ** 2 * 4);
+
     colors.forEach((color, i) => {
       rgba[i * 4] = Math.min(255, Math.max(0, Math.round(color[0] * 255))); // r
       rgba[i * 4 + 1] = Math.min(255, Math.max(0, Math.round(color[1] * 255))); // g
       rgba[i * 4 + 2] = Math.min(255, Math.max(0, Math.round(color[2] * 255))); // b
-      rgba[i * 4 + 3] = Number.isNaN(color[3])
+      rgba[i * 4 + 3] = Number.isNaN(+color[3])
         ? 255
         : Math.min(255, Math.max(0, Math.round(color[3] * 255))); // a
     });
@@ -371,8 +398,9 @@ const createLine = (
     });
   };
 
-  const setColor = (newColor) => {
+  const setColor = (newColor, newOpacity) => {
     color = newColor;
+    opacity = newOpacity;
     if (colorTex) colorTex.destroy();
     createColorTexture();
   };
@@ -381,10 +409,11 @@ const createLine = (
 
   const setStyle = ({
     color: newColor,
+    opacity: newOpacity,
     miter: newMiter,
     width: newWidth,
   } = {}) => {
-    if (newColor) setColor(newColor);
+    if (newColor) setColor(newColor, newOpacity);
     if (newMiter) miter = newMiter;
     if (+newWidth > 0) width = newWidth;
   };

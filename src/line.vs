@@ -8,11 +8,14 @@ uniform sampler2D colorTex;
 uniform float colorTexRes;
 uniform float colorTexEps;
 uniform float width;
+uniform float useOpacity;
+uniform float useColorOpacity;
 uniform int miter;
 
 attribute vec3 prevPosition;
 attribute vec3 currPosition;
 attribute vec3 nextPosition;
+attribute float opacity;
 attribute float offsetScale;
 attribute float colorIndex;
 
@@ -67,6 +70,7 @@ void main() {
   );
 
   color = texture2D(colorTex, colorTexIndex);
+  color.a = useColorOpacity * color.a + useOpacity * opacity;
 }`;
 
 export default VERTEX_SHADER;

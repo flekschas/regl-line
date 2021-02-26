@@ -27,12 +27,12 @@ npm -i regl-line
 ## Getting started
 
 ```javascript
-import createRegl from "regl";
-import createCamera from "canvas-orbit-camera";
-import createLine from "regl-line";
+import createRegl from 'regl';
+import createCamera from 'canvas-orbit-camera';
+import createLine from 'regl-line';
 
 // Setup the canvas
-const canvas = document.getElementById("canvas");
+const canvas = document.getElementById('canvas');
 const { width, height } = canvas.getBoundingClientRect();
 canvas.width = width * resize.scale;
 canvas.height = height * resize.scale;
@@ -47,7 +47,7 @@ const line = createLine(regl, {
   color: [0.8, 0.2, 0.0, 1.0],
   is2d: true,
   // Flat list of normalized-device coordinates
-  points: [-0.9, +0.9, +0.9, +0.9, +0.9, -0.9, -0.9, -0.9, -0.9, +0.85]
+  points: [-0.9, +0.9, +0.9, +0.9, +0.9, -0.9, -0.9, -0.9, -0.9, +0.85],
 });
 
 // Draw
@@ -82,7 +82,7 @@ line.setStyle({
   color: [
     [0, 1, 1, 1], // cyan
     [1, 1, 0, 1], // yellow
-  ]
+  ],
 });
 ```
 
@@ -95,7 +95,7 @@ line.setPoints(points, {
     1, //  right line will be yellow
     0, // bottom line will be cyan
     1, //   left line will be yellow
-  ]
+  ],
 });
 ```
 
@@ -106,13 +106,30 @@ You could even go one step further and specify the color for each point on the l
 ```javascript
 line.setPoints(points, {
   colorIndices: [
-    [0, 0, 1, 1], //    top line will cyan to yellow
-    [1, 1, 0, 0], //  right line will yellow to cyan
-    [0, 1, 0, 1], // bottom line will be cyan, yellow, cyan, yellow
-    [0, 1, 1, 0], //   left line will be cyan, yellow, cyan
-  ]
+    [0, 0, 1, 1], //    top line will have a cyan to yellow gradient
+    [1, 1, 0, 0], //  right line will have a yellow to cyan gradient
+    [0, 1, 0, 1], // bottom line will have a cyan, yellow, cyan, yellow gradient
+    [0, 1, 1, 0], //   left line will have a cyan, yellow, cyan gradient
+  ],
 });
 ```
+
+### Variable Line Opacity
+
+To adjust, you can adjust the line width using
+
+```javascript
+line.setPoints(points, {
+  opacities: [
+    0.25, //    top line will have an opacity of 0.25
+    0.5, //  right line will have an opacity of 0.5
+    0.75, // bottom line will have an opacity of 0.75
+    1.0, //   left line will have an opacity of 1.0
+  ],
+});
+```
+
+Similar to [color gradient](#color-gradient), you can also specify the opacity for each point on the line using a list of list of numbers.
 
 ### Variable Line Width
 
@@ -125,11 +142,11 @@ line.setPoints(points, {
     2, //  right line will have a width of 2
     3, // bottom line will have a width of 3
     4, //   left line will have a width of 4
-  ]
+  ],
 });
 ```
 
-As with the [color gradient](#color-gradient) you can specify the width for each point on the line using a list of list of numbers.
+Similar to [color gradient](#color-gradient), you can also specify the width for each point on the line using a list of list of numbers.
 
 ## API
 
