@@ -1,3 +1,7 @@
+## v0.4.3
+
+- Fix an issue of shifted `colorIndices`, `opacities`, and `widths`.
+
 ## v0.4.2
 
 - Expose opacities buffer via `getBuffer()` and the data via `getData()`

@@ -144,9 +144,24 @@ const createLine = (
         offset: FLOAT_BYTES * 3 * 4,
         stride: FLOAT_BYTES * 3,
       },
-      opacity: () => opacityBuffer,
-      offsetScale: () => widthBuffer,
-      colorIndex: () => colorIndexBuffer,
+      opacity: {
+        buffer: () => opacityBuffer,
+        // note that each point is duplicated, hence we need to skip over the first two
+        offset: FLOAT_BYTES * 2,
+        stride: FLOAT_BYTES,
+      },
+      offsetScale: {
+        buffer: () => widthBuffer,
+        // note that each point is duplicated, hence we need to skip over the first two
+        offset: FLOAT_BYTES * 2,
+        stride: FLOAT_BYTES,
+      },
+      colorIndex: {
+        buffer: () => colorIndexBuffer,
+        // note that each point is duplicated, hence we need to skip over the first two
+        offset: FLOAT_BYTES * 2,
+        stride: FLOAT_BYTES,
+      },
     };
 
     elements = regl.elements();
@@ -243,8 +258,8 @@ const createLine = (
     pointsDup = new Float32Array(Buffer.duplicate(pointsPadded, 3));
     // duplicate each color, opacity, and width such that we have a positive
     // and negative width
-    colorIndicesDup = Buffer.duplicate(finalColorIndices, 1);
-    opacitiesDup = Buffer.duplicate(finalOpacities, 1);
+    colorIndicesDup = Buffer.duplicate(finalColorIndices);
+    opacitiesDup = Buffer.duplicate(finalOpacities);
     widthsDup = Buffer.duplicate(finalWidths, 1, -1);
     // create the line mesh, i.e., the vertex indices
     indices = createMesh(numPointsPerLine);
