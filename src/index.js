@@ -195,8 +195,8 @@ const createLine = (
         colorTexRes: () => colorTexRes,
         colorTexEps: () => 0.5 / colorTexRes,
         pixelRatio: ({ pixelRatio }) => pixelRatio,
-        width: ({ pixelRatio, viewportHeight, viewportWidth }) =>
-          (width / Math.max(viewportWidth, viewportHeight)) * pixelRatio,
+        width: ({ pixelRatio, viewportHeight }) =>
+          (width / viewportHeight) * pixelRatio,
         useOpacity,
         useColorOpacity: () => +!useOpacity(),
         miter,

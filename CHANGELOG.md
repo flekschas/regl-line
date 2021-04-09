@@ -1,3 +1,7 @@
+## v0.4.4
+
+- Fix an issue with the line width
+
 ## v0.4.3
 
 - Fix an issue of shifted `colorIndices`, `opacities`, and `widths`.
