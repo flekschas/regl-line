@@ -1,3 +1,7 @@
+## v1.0.0
+
+- Update regl dependency to v2
+
 ## v0.4.4
 
 - Fix an issue with the line width

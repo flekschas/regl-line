@@ -34,11 +34,11 @@
     "stats": "webpack --json > stats.json"
   },
   "dependencies": {
-    "regl": "^1.3.7",
+    "regl": "^2.1.0",
     "gl-matrix": "^3.3.0"
   },
   "peerDependencies": {
-    "regl": "^1.3.7"
+    "regl": "^2.1.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
