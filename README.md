@@ -1,7 +1,7 @@
 # Regl Line
 
 [![npm version](https://img.shields.io/npm/v/regl-line.svg?color=7f99ff&style=flat-square)](https://www.npmjs.com/package/regl-line)
-[![build status](https://img.shields.io/github/workflow/status/flekschas/regl-line/build?color=a17fff&style=flat-square)](https://github.com/flekschas/regl-line/actions?query=workflow%3Abuild)
+[![build status](https://img.shields.io/github/actions/workflow/status/flekschas/regl-line/build.yml?branch=master&color=a17fff&style=flat-square)](https://github.com/flekschas/regl-line/actions?query=workflow%3Abuild)
 [![gzipped size](https://img.badgesize.io/https:/unpkg.com/regl-line/dist/regl-line.min.js?color=e17fff&compression=gzip&style=flat-square)](https://bundlephobia.com/result?p=regl-line)
 [![code style prettier](https://img.shields.io/badge/code_style-prettier-80a1ff.svg?style=flat-square)](https://github.com/prettier/prettier)
 [![regl-line demo](https://img.shields.io/badge/demo-online-f264ab.svg?style=flat-square)](https://flekschas.github.io/regl-line/)
