@@ -59,7 +59,7 @@
     "rollup-plugin-terser": "^7.0.2",
     "webpack": "^4.44.2",
     "webpack-cli": "^3.3.12",
-    "webpack-dev-server": "^3.11.0"
+    "webpack-dev-server": "^5.0.4"
   },
   "homepage": "https://github.com/flekschas/regl-line",
   "repository": {
