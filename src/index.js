@@ -85,7 +85,7 @@ const createLine = (
     opacities = [],
     width = 1,
     widths = [],
-    miter = 1,
+    miter = true,
     is2d = false,
     zPos2d = 0,
   } = {}
@@ -199,7 +199,7 @@ const createLine = (
           (width / viewportHeight) * pixelRatio,
         useOpacity,
         useColorOpacity: () => +!useOpacity(),
-        miter,
+        miter: Number(Boolean(miter)),
       },
       elements: () => elements,
       vert: VERT_SHADER,

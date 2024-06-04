@@ -1,6 +1,7 @@
 ## v1.0.1
 
 - Fix miter line join
+- Fix `miter` default value to `true` and harden code around it's internal usage
 
 ## v1.0.0
 
