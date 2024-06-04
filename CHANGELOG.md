@@ -1,3 +1,7 @@
+## v1.0.1
+
+- Fix miter line join
+
 ## v1.0.0
 
 - Update regl dependency to v2

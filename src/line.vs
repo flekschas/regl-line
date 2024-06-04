@@ -32,6 +32,8 @@ void main() {
   vec2 currScreen = currProjected.xy / currProjected.w * aspectVec;
   vec2 nextScreen = nextProjected.xy / nextProjected.w * aspectVec;
 
+  float len = width;
+
   // starting point uses (next - current)
   vec2 dir = vec2(0.0);
   if (currScreen == prevScreen) {
@@ -51,13 +53,14 @@ void main() {
       vec2 tangent = normalize(dirA + dirB);
       vec2 perp = vec2(-dirA.y, dirA.x);
       vec2 miter = vec2(-tangent.y, tangent.x);
+      len = width / dot(miter, perp);
       dir = tangent;
     } else {
       dir = dirA;
     }
   }
 
-  vec2 normal = vec2(-dir.y, dir.x) * width;
+  vec2 normal = vec2(-dir.y, dir.x) * len;
   normal.x /= aspectRatio;
   vec4 offset = vec4(normal * offsetScale, 0.0, 0.0);
   gl_Position = currProjected + offset;
