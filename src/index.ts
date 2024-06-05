@@ -236,10 +236,14 @@ const createLine = (
 		+(opacities.length === numPoints || opacity !== null);
 
 	const init = () => {
-		pointBuffer = regl.buffer(0);
-		opacityBuffer = regl.buffer(0);
-		widthBuffer = regl.buffer(0);
-		colorIndexBuffer = regl.buffer(0);
+		// @ts-ignore
+		pointBuffer = regl.buffer();
+		// @ts-ignore
+		opacityBuffer = regl.buffer();
+		// @ts-ignore
+		widthBuffer = regl.buffer();
+		// @ts-ignore
+		colorIndexBuffer = regl.buffer();
 
 		attributes = {
 			prevPosition: {
@@ -285,7 +289,8 @@ const createLine = (
 			},
 		};
 
-		elements = regl.elements({});
+		// @ts-ignore
+		elements = regl.elements();
 
 		drawLine = regl<
 			// Uniforms

@@ -1,3 +1,7 @@
+## v1.1.1
+
+- Fix WebGL warning due to TypeScript inconsistency in Regl
+
 ## v1.1.0
 
 - Migrated to TypeScript
