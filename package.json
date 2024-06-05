@@ -19,13 +19,13 @@
   ],
   "type": "module",
   "scripts": {
-    "build": "tsc --build && vite build",
+    "build": "npm run fix && tsc --build && vite build",
     "deploy": "rm -rf docs; npm run build; cp teaser.gif ./docs/; gh-pages -d docs -t --git git",
     "prepublishOnly": "npm run fix",
     "prerelease": "rm -rf dist/*; npm run build; zip -r dist.zip dist",
     "pretest": "npm run fix",
     "start": "vite",
-    "fix": "biome check --apply ."
+    "fix": "biome check --write ."
   },
   "dependencies": {
     "gl-matrix": "^3.3.0",
