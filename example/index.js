@@ -1,8 +1,7 @@
-import createCamera from 'canvas-orbit-camera';
 import createRegl from 'regl';
 import { mat4 } from 'gl-matrix';
 
-import createLine from '../src/index.js';
+import createLine from '../src';
 
 //------------------------------------------------------------------------------
 // Utilities
@@ -34,7 +33,7 @@ const mapElement = (buffer, elementIndex, stride, map) => {
 
 const canvas = document.getElementById('canvas');
 const regl = createRegl(canvas);
-const camera = createCamera(canvas);
+// const camera = createCamera(canvas);
 const makeProjection = (viewportWidth, viewportHeight) =>
   mat4.perspective([], Math.PI / 2, viewportWidth / viewportHeight, 0.01, 1000);
 
@@ -81,7 +80,7 @@ const model = mat4.fromScaling(mat4.create(), [scale, scale, 1.0]);
 
 const line = createLine(regl, {
   width: 3,
-  miter: 0,
+  miter: false,
   color: Array(numColors)
     .fill()
     .map((v, i) => [0.8, 0.5 - (i / 255) * 2, i / 255, 1]),
@@ -118,16 +117,21 @@ const cycleColors = (buffer) => {
   }
 };
 
+const view = new Float32Array([
+  1, 0, 0, 0,
+  0, 1, 0, 0,
+  0, 0, 1, 0,
+  0, 0, 0, 1
+]);
+console.log('view', view);
+
 regl.frame(({ tick, viewportWidth, viewportHeight }) => {
   regl.clear({
     color: [0, 0, 0, 1],
     depth: 1,
   });
-  // Update the camera
-  camera.tick();
   // For pan and zoom
   const projection = makeProjection(viewportWidth, viewportHeight);
-  const view = camera.view();
   lineSimple.draw({ projection, model, view });
   // For animation
   mapElement(line.getData().points, 2, 3, (v, a, i) => {

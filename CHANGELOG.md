@@ -1,3 +1,7 @@
+## v1.1.0
+
+- Migrated to TypeScript
+
 ## v1.0.1
 
 - Fix miter line join
